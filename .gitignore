@@ -2,8 +2,8 @@
 certs/
 private/
 
-certindex.*
-cacert.pem
-serial*
-server*
-client*
+/certindex.*
+/cacert.pem
+/serial*
+/server*
+/client*
