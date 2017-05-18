@@ -5,5 +5,5 @@ private/
 certindex.*
 cacert.pem
 serial*
-server-*
-client-*
+server*
+client*
