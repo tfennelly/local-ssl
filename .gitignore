@@ -1,10 +1,9 @@
-# Ignore everything, except settings below
-*
+.idea
+certs/
+private/
 
-# exceptions ...
-!.gitignore
-!genkeys.sh
-!openssl.cnf
-!pom.xml
-!README.md
-!src/main/java/com/cloudbees/tf/Main.java
+certindex.*
+cacert.pem
+serial*
+server-*
+client-*
