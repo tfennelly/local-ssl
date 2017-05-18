@@ -17,6 +17,8 @@ openssl req -new -x509 -extensions v3_ca -keyout private/cakey.pem -out cacert.p
 openssl req -new -nodes -out server-req.pem -keyout private/server-key.pem -days 365 -config ./openssl.cnf -subj "$SUBJECT-SRV" -passout pass:$PASSWD
 # Sign with our test root CA
 openssl ca -batch -out server-cert.pem -days 365 -config ./openssl.cnf -passin pass:$PASSWD -infiles server-req.pem
+# Server's PKCS12 file
+openssl pkcs12 -export -in server-cert.pem -inkey private/server-key.pem -certfile cacert.pem -name "Server" -out server-cert.p12 -passout pass:$PASSWD
 
 # Create the client key and cert
 openssl req -new -nodes -out client-req.pem -keyout private/client-key.pem -days 365 -config ./openssl.cnf -subj "$SUBJECT-CLI" -passout pass:$PASSWD
