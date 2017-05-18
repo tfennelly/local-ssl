@@ -8,11 +8,16 @@ rm certindex.* cacert.pem serial* server* client*
 rm -rf private && mkdir private
 rm -rf certs && mkdir certs
 
+######################################################################
 # Create our localhost test root CA
+######################################################################
 echo 100001 > serial
 touch certindex.txt
 openssl req -new -x509 -extensions v3_ca -keyout private/cakey.pem -out cacert.pem -days 365 -config ./openssl.cnf -subj "$SUBJECT-CA" -passout pass:$PASSWD
 
+######################################################################
+# Server files
+######################################################################
 # Create the server key and cert
 openssl req -new -nodes -out server-req.pem -keyout private/server-key.pem -days 365 -config ./openssl.cnf -subj "$SUBJECT-SRV" -passout pass:$PASSWD
 # Sign with our test root CA
@@ -22,6 +27,9 @@ openssl pkcs12 -export -in server-cert.pem -inkey private/server-key.pem -certfi
 # Server's Java KeyStore
 keytool -importkeystore -deststorepass $PASSWD -destkeypass $PASSWD -destkeystore server_keystore.jks -srckeystore server-cert.p12 -srcstoretype PKCS12 -srcstorepass $PASSWD -alias server
 
+######################################################################
+# Client files
+######################################################################
 # Create the client key and cert
 openssl req -new -nodes -out client-req.pem -keyout private/client-key.pem -days 365 -config ./openssl.cnf -subj "$SUBJECT-CLI" -passout pass:$PASSWD
 # Sign with our test root CA
