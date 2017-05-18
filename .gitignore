@@ -1,0 +1,9 @@
+# Ignore everything, except settings below
+*
+
+# exceptions ...
+!.gitignore
+!genkeys.sh
+!openssl.cnf
+!pom.xml
+!src/main/java/com/cloudbees/tf/Main.java
