@@ -23,12 +23,27 @@
  */
 package com.cloudbees.tf;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+
 /**
  * @author <a href="mailto:tom.fennelly@gmail.com">tom.fennelly@gmail.com</a>
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Server server = Server.start();
         
+        try {
+            HttpClient httpClient = Client.newClient();
+
+            CloseableHttpResponse httpResponse =
+                    (CloseableHttpResponse) httpClient.execute(new HttpGet("https://" + server.getUrl() + "/echo/this"));
+
+            System.out.println(httpResponse.getStatusLine().getStatusCode());
+        } finally {
+            server.stop();
+        }
     }
 }

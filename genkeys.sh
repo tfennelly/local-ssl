@@ -24,8 +24,9 @@ openssl req -new -nodes -out server-req.pem -keyout private/server-key.pem -days
 openssl ca -batch -out server-cert.pem -days 365 -config ./openssl.cnf -passin pass:$PASSWD -infiles server-req.pem
 # Server's PKCS12 file
 openssl pkcs12 -export -in server-cert.pem -inkey private/server-key.pem -certfile cacert.pem -name "Server" -out server-cert.p12 -passout pass:$PASSWD
-# Server's Java KeyStore
+# Server's Java KeyStore and TrustStore
 keytool -importkeystore -deststorepass $PASSWD -destkeypass $PASSWD -destkeystore server_keystore.jks -srckeystore server-cert.p12 -srcstoretype PKCS12 -srcstorepass $PASSWD -alias server
+keytool -import -v -trustcacerts -keystore server_truststore.jks -storepass $PASSWD -noprompt -alias cacert -file cacert.pem
 
 ######################################################################
 # Client files
@@ -36,5 +37,6 @@ openssl req -new -nodes -out client-req.pem -keyout private/client-key.pem -days
 openssl ca -batch -out client-cert.pem -days 365 -config ./openssl.cnf -passin pass:$PASSWD -infiles client-req.pem 
 # Client's PKCS12 file
 openssl pkcs12 -export -in client-cert.pem -inkey private/client-key.pem -certfile cacert.pem -name "Client" -out client-cert.p12 -passout pass:$PASSWD
-# Client's Java TrustStore
+# Client's Java KeyStore and TrustStore
+keytool -importkeystore -deststorepass $PASSWD -destkeypass $PASSWD -destkeystore client_keystore.jks -srckeystore client-cert.p12 -srcstoretype pkcs12 -srcstorepass $PASSWD -deststoretype jks
 keytool -import -v -trustcacerts -keystore client_truststore.jks -storepass $PASSWD -noprompt -alias server -file server-cert.pem
